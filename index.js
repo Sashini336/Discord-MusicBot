@@ -5,7 +5,12 @@ console.log('Environment variables loaded');
 const DiscordMusicBot = require("./lib/DiscordMusicBot");
 const { exec } = require("child_process");
 const express = require('express');
+const cors = require('cors');
 const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
 const port = process.env.PORT || 3000;
 
 if (process.env.REPL_ID) {
@@ -33,6 +38,20 @@ app.get('/status', (req, res) => {
     uptime: process.uptime(),
     lastDeployment: client.readyAt ? client.readyAt.toISOString() : null,
     guildCount: client.guilds.cache.size
+  });
+});
+
+app.get('/', (req, res) => {
+  res.json({ status: 'online', message: 'Bot is running' });
+});
+
+app.get('/health', (req, res) => {
+  res.json({
+    status: client.isReady() ? 'online' : 'offline',
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    guilds: client.guilds.cache.size,
+    timestamp: new Date().toISOString()
   });
 });
 
