@@ -13,7 +13,8 @@
     "destroy-global": "node deploy/destroyGlobal",
     "ddev": "cd dashboard && npm run dev",
     "dbuild": "cd dashboard && npm run build && npm run export",
-    "dstart": "cd dashboard && npm run start"
+    "dstart": "cd dashboard && npm run start",
+    "build": "npm install && cd dashboard && npm install && npm run build && npm run export"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Music Bot Status</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        #status { font-weight: bold; }
+        .online { color: green; }
+        .offline { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Discord Music Bot Status</h1>
+    <p>Status: <span id="status">Checking...</span></p>
+    <p>Last Checked: <span id="lastChecked"></span></p>
+
+    <script>
+        const STATUS_URL = 'https://c801ce56-c4e3-49e8-8bfb-81eceec1778c.up.railway.app/';
+
+        function updateStatus() {
+            axios.get(STATUS_URL)
+                .then(response => {
+                    document.getElementById('status').textContent = 'Online';
+                    document.getElementById('status').className = 'online';
+                    document.getElementById('lastChecked').textContent = new Date().toLocaleString();
+                })
+                .catch(error => {
+                    document.getElementById('status').textContent = 'Offline';
+                    document.getElementById('status').className = 'offline';
+                    document.getElementById('lastChecked').textContent = new Date().toLocaleString();
+                    console.error('Error fetching status:', error);
+                });
+        }
+
+        updateStatus();
+        setInterval(updateStatus, 60000); // Update every minute
+    </script>
+</body>
+</html>

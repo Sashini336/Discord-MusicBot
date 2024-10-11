@@ -55,6 +55,15 @@ app.get('/health', (req, res) => {
   });
 });
 
+const path = require('path');
+
+// Serve Next.js app
+app.use(express.static(path.join(__dirname, 'dashboard', 'out')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dashboard', 'out', 'index.html'));
+});
+
 app.listen(port, () => {
   console.log(`Status server listening at http://localhost:${port}`);
 });
