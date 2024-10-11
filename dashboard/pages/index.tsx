@@ -135,5 +135,4 @@ const Home = (_props: any) => {
     )
 }
 
-
-export default Home 
+export default Home

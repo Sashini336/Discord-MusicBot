@@ -61,6 +61,7 @@ const path = require('path');
 app.use(express.static(path.join(__dirname, 'dashboard', 'out')));
 
 app.get('*', (req, res) => {
+  console.log('Received request for:', req.url);
   res.sendFile(path.join(__dirname, 'dashboard', 'out', 'index.html'));
 });
 
