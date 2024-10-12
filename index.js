@@ -31,6 +31,8 @@ console.log("Make sure to fill in the config.js before starting the bot.");
 
 const getClient = () => client;
 
+const dashboardLink = `${client.config.website}/dashboard`;
+
 // Add this new code
 app.get('/status', (req, res) => {
   res.json({
@@ -47,10 +49,10 @@ app.get('/', (req, res) => {
 app.get('/health', (req, res) => {
   res.json({
     status: client.isReady() ? 'online' : 'offline',
-    uptime: process.uptime(),
-    memory: process.memoryUsage(),
-    guilds: client.guilds.cache.size,
-    timestamp: new Date().toISOString()
+    uptime: process.uptime() ? process.uptime() : 'offline',  
+    memory: process.memoryUsage() ? process.memoryUsage() : 'offline', 
+    guilds: client.guilds.cache.size ? client.guilds.cache.size : 'offline',
+    timestamp: new Date().toISOString()  
   });
 });
 
@@ -58,6 +60,7 @@ const path = require('path');
 
 // Serve the React app
 app.use(express.static(path.join(__dirname, 'dashboard', 'build')));
+app.use(express.static(path.join(__dirname, 'dashboard', 'out')));
 
 // Handle React routing, return all requests to React app
 app.get('*', function(req, res) {
