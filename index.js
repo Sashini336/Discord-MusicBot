@@ -44,7 +44,6 @@ app.get('/status', (req, res) => {
 app.get('/', (req, res) => {
   res.json({ status: 'online', message: 'Bot is running' });
 });
-
 app.get('/health', (req, res) => {
   res.json({
     status: client.isReady() ? 'online' : 'offline',
@@ -57,12 +56,85 @@ app.get('/health', (req, res) => {
 
 const path = require('path');
 
-// Serve Next.js app
-app.use(express.static(path.join(__dirname, 'dashboard', 'out')));
+// Serve the React app
+app.use(express.static(path.join(__dirname, 'dashboard', 'build')));
 
-app.get('*', (req, res) => {
-  console.log('Received request for:', req.url);
-  res.sendFile(path.join(__dirname, 'dashboard', 'out', 'index.html'));
+// Handle React routing, return all requests to React app
+app.get('*', function(req, res) {
+  res.sendFile(path.join(__dirname, 'dashboard', 'build', 'index.html'));
+});
+
+app.get('/api/current-track', (req, res) => {
+  const player = client.manager.players.get(guildId);
+  if (player && player.queue.current) {
+    res.json({
+      title: player.queue.current.title,
+      artist: player.queue.current.author,
+      isPlaying: player.playing
+    });
+  } else {
+    res.json(null);
+  }
+});
+
+app.get('/api/queue', (req, res) => {
+  const player = client.manager.players.get(guildId);
+  if (player) {
+    res.json(player.queue.map(track => ({
+      title: track.title,
+      artist: track.author
+    })));
+  } else {
+    res.json([]);
+  }
+});
+
+app.post('/api/play-pause', (req, res) => {
+  const player = client.manager.players.get(guildId);
+  if (player) {
+    player.pause(!player.paused);
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.post('/api/skip', (req, res) => {
+  const player = client.manager.players.get(guildId);
+  if (player) {
+    player.stop();
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.post('/api/previous', (req, res) => {
+  const player = client.manager.players.get(guildId);
+  if (player && player.queue.previous) {
+    player.queue.unshift(player.queue.previous);
+    player.stop();
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+app.post('/api/add-track', async (req, res) => {
+  const { url } = req.body;
+  const player = client.manager.players.get(guildId);
+  if (player) {
+    try {
+      const result = await player.search(url, req.user);
+      player.queue.add(result.tracks);
+      if (!player.playing && !player.paused && !player.queue.size) player.play();
+      res.sendStatus(200);
+    } catch (error) {
+      res.status(400).json({ error: 'Failed to add track' });
+    }
+  } else {
+    res.sendStatus(404);
+  }
 });
 
 app.listen(port, () => {

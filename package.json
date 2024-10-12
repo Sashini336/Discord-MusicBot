@@ -4,17 +4,9 @@
   "description": "Very simple discord music bot with the discord.js with Song Name playing. It can able to play music with the song name",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "rm-logs": "rm logs.log",
-    "lint": "prettier --check .",
-    "deploy": "node deploy/deployGlobal",
-    "guild": "node deploy/deployGuild",
-    "destroy-guild": "node deploy/destroyGuild",
-    "destroy-global": "node deploy/destroyGlobal",
-    "ddev": "cd dashboard && npm run dev",
-    "dbuild": "cd dashboard && npm run build && npm run export",
-    "dstart": "cd dashboard && npm run start",
-    "build": "npm install && cd dashboard && npm install && npm run build && npm run export"
+    "start": "node index.js",
+    "build": "cd dashboard && npm run build",
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -42,7 +34,7 @@
   "dependencies": {
     "@discordjs/builders": "^1.4.0",
     "@discordjs/rest": "^1.5.0",
-    "axios": "^0.27.0",
+    "axios": "^0.28.0",
     "better-erela.js-apple": "^0.1.0",
     "better-erela.js-spotify": "1.3.9",
     "colors": "1.3.3",
