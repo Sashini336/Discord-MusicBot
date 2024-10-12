@@ -42,10 +42,10 @@ app.get('/status', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.json({ status: 'online', message: 'Bot is running' });
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/health', (req, res) => {
+app.get('/api/status', (req, res) => {
   res.json({
     status: client.isReady() ? 'online' : 'offline',
     uptime: process.uptime(),
@@ -55,17 +55,31 @@ app.get('/health', (req, res) => {
   });
 });
 
+app.post('/api/login', (req, res) => {
+  // Here you should implement proper authentication logic
+  // For now, we'll just return a mock response
+  res.json({
+    success: true,
+    token: 'mock_token',
+    user: {
+      id: '123',
+      username: 'testuser'
+    }
+  });
+});
+
 const path = require('path');
 
-// Serve Next.js app
-app.use(express.static(path.join(__dirname, 'dashboard', 'out')));
+// Serve dashboard static files
+app.use('/dashboard', express.static(path.join(__dirname, 'dashboard', 'out')));
 
-app.get('*', (req, res) => {
+// For dashboard routes, serve the index.html file
+app.get('/dashboard/*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard', 'out', 'index.html'));
 });
 
 app.listen(port, () => {
-  console.log(`Status server listening at http://localhost:${port}`);
+  console.log(`Server listening at http://localhost:${port}`);
 });
 
 module.exports = {
