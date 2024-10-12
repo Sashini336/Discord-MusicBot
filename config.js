@@ -19,8 +19,8 @@ module.exports = {
     autoPause: true,
     autoLeave: true,
     debug: process.env.DEBUG === 'true',
-    cookieSecret: process.env.COOKIE_SECRET,
-    website: process.env.RAILWAY_STATIC_URL || "https://c801ce56-c4e3-49e8-8bfb-81eceec1778c.up.railway.app",
+    cookieSecret: process.env.COOKIE_SECRET || "CookieSecret",
+    website: process.env.WEBSITE || "https://worker-production-cfbc.up.railway.app",
     nodes: [
         {
             identifier: "Main Node",
