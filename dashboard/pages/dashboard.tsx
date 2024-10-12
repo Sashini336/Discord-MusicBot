@@ -1,8 +1,8 @@
-import Head from "next/head";
-import {AudiotrackRounded, DnsRounded, PersonRounded, RocketLaunchRounded} from "@mui/icons-material"
-import Content from "../components/content";
-import StatCard from "../components/StatCard";
-import {useEffect, useState} from "react";
+import Head from 'next/head'
+import { AudiotrackRounded, DnsRounded, PersonRounded, RocketLaunchRounded } from '@mui/icons-material'
+import Content from '../components/content'
+import StatCard from '../components/StatCard'
+import { useEffect, useState } from 'react'
 import {getDashboard, IDashboard} from "../utils/dashboard";
 
 const Dashboard = (_props: any) => {
